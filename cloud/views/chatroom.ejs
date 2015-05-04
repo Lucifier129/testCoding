@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title><%= title %></title>
+	</head>
+	<body>
+		<div id="container">
+			<textarea name="" id="" cols="30" rows="10" placeholder="请输入消息..."></textarea>
+			<button id="submit">发送消息</button>
+		</div>
+		<script src="/socket.io/socket.io.js"></script>
+		<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+		<script>
+		$(function() {
+			var socket = io()
+			$('#submit').on('click', function() {
+				var $textarea = $('textarea')
+				var val = $textarea.val()
+				if (val) {
+					socket.emit('chat msg', val)
+					$textarea.val('')[0].focus()
+				}
+			})
+
+			socket.on('chat msg', function(msg) {
+				$('#container').append('<p>' + msg + '</p>')
+			})
+
+			socket.on('hi', function() {
+				console.log(arguments)
+			})
+		})
+		</script>
+	</body>
+</html>
